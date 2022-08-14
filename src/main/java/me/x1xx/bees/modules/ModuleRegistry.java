@@ -1,7 +1,6 @@
 package me.x1xx.bees.modules;
 
 import me.x1xx.bees.modules.overlay.Overlay;
-import me.x1xx.bees.modules.rolemention.RoleMention;
 
 import java.util.*;
 
@@ -17,7 +16,6 @@ public class ModuleRegistry {
         moduleSet = new HashSet<>(
                 Arrays.asList(
                      Overlay.class
-//                     RoleMention.class
                 )
         );
     }
