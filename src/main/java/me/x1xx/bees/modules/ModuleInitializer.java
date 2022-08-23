@@ -1,7 +1,7 @@
 package me.x1xx.bees.modules;
 
 import me.x1xx.bees.Main;
-import me.x1xx.bees.database.TokenDAO;
+import me.x1xx.bees.database.TokenSettingsDAO;
 import me.x1xx.bees.database.model.TokenRow;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -47,7 +47,7 @@ public class ModuleInitializer {
         }
 
         this.builder = builder;
-        List<TokenRow> tokens = main.getDatabase().withExtension(TokenDAO.class, TokenDAO::retrieveAll);
+        List<TokenRow> tokens = main.getDatabase().withExtension(TokenSettingsDAO.class, TokenSettingsDAO::retrieveAll);
 
         for (TokenRow token : tokens) {
             loginToken(token);
@@ -84,7 +84,7 @@ public class ModuleInitializer {
 
     public void updateStatus(int id) {
 
-       TokenRow token = main.getDatabase().withExtension(TokenDAO.class, dao -> dao.retrieveById(id));
+       TokenRow token = main.getDatabase().withExtension(TokenSettingsDAO.class, dao -> dao.retrieveById(id));
 
         if(token == null) {
             return;

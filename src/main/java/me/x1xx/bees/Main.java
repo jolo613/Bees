@@ -2,8 +2,7 @@ package me.x1xx.bees;
 
 
 import me.x1xx.bees.configuration.Configuration;
-import me.x1xx.bees.database.SettingsDAO;
-import me.x1xx.bees.database.TokenDAO;
+import me.x1xx.bees.database.TokenSettingsDAO;
 import me.x1xx.bees.modules.ModuleInitializer;
 import me.x1xx.bees.utility.FileWatcher;
 import me.x1xx.bees.utility.WrappedObject;
@@ -13,8 +12,6 @@ import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
 
 public class Main {
     private final Logger logger = LoggerFactory.getLogger(Main.class);
@@ -69,17 +66,14 @@ public class Main {
 
         getLogger().info("Watching configuration changes.");
 
-        String path = new File(new File(this.getClass().getProtectionDomain()
-                .getCodeSource().getLocation().getPath()).getParent(), "/data/database.db").getPath();
-
         getLogger().info("Connecting to database");
 
-        database = Jdbi.create("jdbc:sqlite:" + path);
+        database = Jdbi.create("jdbc:mysql://" + getConfig().database.host + ":" + getConfig().database.port + "/" + getConfig().database.database,
+                getConfig().database.username, getConfig().database.password);
         database.installPlugin(new SqlObjectPlugin());
 
 
-        database.useExtension(TokenDAO.class, TokenDAO::createTable);
-        database.useExtension(SettingsDAO.class, SettingsDAO::createTable);
+        // todo: setup database
 
         getLogger().info("Connected to database");
 

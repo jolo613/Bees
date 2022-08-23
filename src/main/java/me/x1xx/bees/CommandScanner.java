@@ -1,6 +1,6 @@
 package me.x1xx.bees;
 
-import me.x1xx.bees.database.TokenDAO;
+import me.x1xx.bees.database.TokenSettingsDAO;
 import me.x1xx.bees.database.model.TokenRow;
 import me.x1xx.bees.utility.TableBuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -20,20 +20,20 @@ public class CommandScanner {
                         String token = s[2];
                         String alias = in.substring(s[2].length() + s[1].length() + s[0].length() + 3);
 
-                        int id = main.getDatabase().withExtension(TokenDAO.class, dao -> dao.insert(token, alias));
+                        int id = main.getDatabase().withExtension(TokenSettingsDAO.class, dao -> dao.insert(token, alias));
                         main.getLogger().info("Added token " + alias + ":" + id);
-                        main.getInitializer().loginToken(main.getDatabase().withExtension(TokenDAO.class, dao -> dao.retrieveById(id)));
+                        main.getInitializer().loginToken(main.getDatabase().withExtension(TokenSettingsDAO.class, dao -> dao.retrieveById(id)));
                     } else if (s[1].equalsIgnoreCase("remove")) {
                         int id = Integer.parseInt(s[2]);
-                        TokenRow result = main.getDatabase().withExtension(TokenDAO.class, dao -> dao.retrieveById(id));
-                        main.getDatabase().useExtension(TokenDAO.class, dao -> dao.removeById(id));
+                        TokenRow result = main.getDatabase().withExtension(TokenSettingsDAO.class, dao -> dao.retrieveById(id));
+                        main.getDatabase().useExtension(TokenSettingsDAO.class, dao -> dao.removeById(id));
                         if (result != null) {
                             main.getLogger().info("Removed token " + result.getAlias() + ":" + result.getId());
                             main.getInitializer().logOutJDA(id);
                         } else
                             main.getLogger().info("No token could be found with that id!");
                     } else if (s[1].equalsIgnoreCase("list")) {
-                        List<TokenRow> tokens = main.getDatabase().withExtension(TokenDAO.class, TokenDAO::retrieveAll);
+                        List<TokenRow> tokens = main.getDatabase().withExtension(TokenSettingsDAO.class, TokenSettingsDAO::retrieveAll);
                         String[][] values = new String[tokens.size()][6];
                         for (int i = 0; i < tokens.size(); i++) {
                             TokenRow token = tokens.get(i);
@@ -56,31 +56,31 @@ public class CommandScanner {
                         if (s[2].equalsIgnoreCase("url")) {
                             int id = Integer.parseInt(s[3]);
                             String url = in.substring(s[3].length() + s[2].length() + s[1].length() + s[0].length() + 4);
-                            main.getDatabase().useExtension(TokenDAO.class, dao -> dao.updateURL(id, url));
+                            main.getDatabase().useExtension(TokenSettingsDAO.class, dao -> dao.updateURL(id, url));
                             main.getLogger().info("Updated url!");
                         } else if (s[2].equalsIgnoreCase("topic")) {
                             int id = Integer.parseInt(s[3]);
                             String topic = in.substring(s[3].length() + s[2].length() + s[1].length() + s[0].length() + 4);
-                            main.getDatabase().useExtension(TokenDAO.class, dao -> dao.updateTopic(id, topic));
+                            main.getDatabase().useExtension(TokenSettingsDAO.class, dao -> dao.updateTopic(id, topic));
                             main.getLogger().info("Updated topic!");
                         } else if (s[2].equalsIgnoreCase("activity")) {
                             int id = Integer.parseInt(s[3]);
                             int activity = Integer.parseInt(s[4]);
-                            main.getDatabase().useExtension(TokenDAO.class, dao -> dao.updateActivity(id, activity));
+                            main.getDatabase().useExtension(TokenSettingsDAO.class, dao -> dao.updateActivity(id, activity));
                             main.getLogger().info("Updated activity!");
                         }
                     } else if (s[1].equalsIgnoreCase("remove")) {
                         if (s[2].equalsIgnoreCase("url")) {
                             int id = Integer.parseInt(s[3]);
-                            main.getDatabase().useExtension(TokenDAO.class, dao -> dao.updateURL(id, null));
+                            main.getDatabase().useExtension(TokenSettingsDAO.class, dao -> dao.updateURL(id, null));
                             main.getLogger().info("Removed url!");
                         } else if (s[2].equalsIgnoreCase("topic")) {
                             int id = Integer.parseInt(s[3]);
-                            main.getDatabase().useExtension(TokenDAO.class, dao -> dao.updateTopic(id, null));
+                            main.getDatabase().useExtension(TokenSettingsDAO.class, dao -> dao.updateTopic(id, null));
                             main.getLogger().info("Removed topic!");
                         } else if (s[2].equalsIgnoreCase("activity")) {
                             int id = Integer.parseInt(s[3]);
-                            main.getDatabase().useExtension(TokenDAO.class, dao -> dao.updateActivity(id, 2));
+                            main.getDatabase().useExtension(TokenSettingsDAO.class, dao -> dao.updateActivity(id, 2));
                             main.getLogger().info("Removed activity!");
                         }
                     } else if (s[1].equalsIgnoreCase("types")) {
